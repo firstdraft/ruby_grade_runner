@@ -27,11 +27,14 @@ Gem::Specification.new do |s|
     "README.markdown",
     "Rakefile",
     "VERSION",
-    "lib/grade_runner.rb",
+    "lib/ruby_grade_runner.rb",
+    "lib/ruby_grade_runner/runner.rb",
     "lib/tasks/grade.rake",
+    "lib/tasks/ruby_grade_runner.rake",
+    "ruby_grade_runner.gemspec",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/firstdraft/grade_runner".freeze
+  s.homepage = "http://github.com/firstdraft/ruby_grade_runner".freeze
   s.licenses = ["MIT".freeze]
   s.rubygems_version = "3.0.8".freeze
   s.summary = "A Ruby client for [firstdraft Grades](https://grades.firstdraft.com)".freeze

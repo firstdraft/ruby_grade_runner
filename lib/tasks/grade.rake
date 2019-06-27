@@ -14,7 +14,7 @@ require_relative "../ruby_grade_runner/runner"
     input_token = ARGV[1]
     file_token = nil
 
-    config_file_name = File.join(project_root, "grades.yml")
+    config_file_name = File.join(project_root, ".theia/.ltici_apitoken.yml")
     student_config = {}
     student_config["submission_url"] = "https://grades.firstdraft.com"
 
@@ -22,7 +22,7 @@ require_relative "../ruby_grade_runner/runner"
       begin
         config = YAML.load_file(config_file_name)
       rescue
-        abort "It looks like there's something wrong with your token in `/grades.yml`. Please delete that file and try `rake grade:all` again, and be sure to provide the access token for THIS project.".red
+        abort "It looks like there's something wrong with your token in `.theia/.ltici_apitoken.yml`. Please delete that file and try `rails grade` again, and be sure to provide the access token for THIS project.".red
       end
       submission_url = config["submission_url"]
       file_token = config["personal_access_token"]
@@ -30,7 +30,9 @@ require_relative "../ruby_grade_runner/runner"
     else
       submission_url = "https://grades.firstdraft.com"
     end
-
+    if file_token.nil? && ENV.has_key?("LTICI_GITPOD_APITOKEN")
+      input_token = ENV.fetch("LTICI_GITPOD_APITOKEN")
+    end
     if !input_token.nil? && input_token != "" && input_token != " "
       token = input_token
       student_config["personal_access_token"] = input_token
@@ -58,43 +60,28 @@ require_relative "../ruby_grade_runner/runner"
     end
     
     if !token.nil? && token != "" && token != " "
+
       if is_valid_token?(submission_url, token) == false
         student_config["personal_access_token"] = nil
         update_config_file(config_file_name, student_config)
-        puts "Your access token looked invalid, so we've reset it to be blank. Please re-run rake grade and, when asked, copy-paste your token carefully from the assignment page."
+        puts "Your access token looked invalid, so we've reset it to be blank. Please re-run rails grade and, when asked, copy-paste your token carefully from the assignment page."
       else
         path = File.join(project_root, "/tmp/output/#{Time.now.to_i}.json")
-        # `bin/rails db:migrate RAILS_ENV=test`
         if File.file?("bin/rake")
           `bin/rake db:migrate`
         end
-        # `RAILS_ENV=test bundle exec rspec --order default --format JsonOutputFormatter --out #{path}`
         `bundle exec rspec --order default -I spec/support -f JsonOutputFormatter --out #{path}`
         rspec_output_json = Oj.load(File.read(path))
-        username = ""
-        reponame = ""
-        sha = ""
+        username = `git config user.name`
+        reponame = Dir.pwd.to_s.split("/").last
+        sha = `git rev-parse HEAD`.slice(0..7)
 
-        GradeRunner::Runner.new(submission_url, token, rspec_output_json, username, reponame, sha, "manual").process
+        RubyGradeRunner::Runner.new(submission_url, token, rspec_output_json, username, reponame, sha, "manual").process
       end
     else
-      puts "We couldn't find your access token, so we couldn't record your grade. Please click on the assignment link again and run the rake grade ...  command shown there."
+      puts "We couldn't find your access token, so we couldn't record your grade. Please click on the assignment link again and run the rails grade ...  command shown there."
     end
   end
-
-  # desc "Run only the next failing test."
-  # task :next do
-  #   path = File.join(__dir__, "examples.txt")
-  #   if File.file?(path)
-  #     # `bin/rails db:migrate RAILS_ENV=test`
-  #     # puts `RAILS_ENV=test bundle exec rspec --next-failure --format HintFormatter`
-  #     puts `bundle exec rspec --next-failure --format HintFormatter`
-  #   else
-  #     # puts `RAILS_ENV=test bundle exec rspec`
-  #     puts `bundle exec rspec`
-  #     puts "Please rerun rake grade:next to run the first failing spec"
-  #   end
-  # end
 
 
 def update_config_file(config_file_name, config)
