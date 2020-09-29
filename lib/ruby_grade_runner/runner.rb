@@ -1,7 +1,7 @@
 require "net/http"
 require "oj"
 
-module GradeRunner
+module RubyGradeRunner
   class Runner
 
     def initialize(submission_root_url, grades_access_token, rspec_output_json, username, reponame, sha, source)

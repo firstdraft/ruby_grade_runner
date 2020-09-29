@@ -2,7 +2,7 @@ require 'yaml'
 require 'net/http'
 require "json"
 require "oj"
-require_relative "../grade_runner/runner"
+require_relative "../ruby_grade_runner/runner"
 
 # desc "Alias for \"grade:next\"."
 # task grade: "grade:all" do

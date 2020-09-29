@@ -1,5 +1,5 @@
 require 'rspec'
-require 'grade_runner'
+require 'ruby_grade_runner'
 
 RSpec.configure do |config|
 end

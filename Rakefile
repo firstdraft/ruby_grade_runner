@@ -13,8 +13,8 @@ require 'rake'
 require 'juwelier'
 Juwelier::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "grade_runner"
-  gem.homepage = "http://github.com/firstdraft/grade_runner"
+  gem.name = "ruby_grade_runner"
+  gem.homepage = "http://github.com/firstdraft/ruby_grade_runner"
   gem.license = "MIT"
   gem.summary = %Q{A Ruby client for [firstdraft Grades](https://grades.firstdraft.com)}
   gem.description = %Q{This gem runs your RSpec test suite and posts the JSON output to grades.firstdraft.com.}
@@ -43,7 +43,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.file?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "grade_runner #{version}"
+  rdoc.title = "ruby_grade_runner #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
