@@ -91,7 +91,7 @@ def update_config_file(config_file_name, config)
 end
 
 def find_or_create_config_dif
-  config_dir_name = Rails.root.join(".vscode")
+  config_dir_name = File.join(project_root, ".vscode")
   Dir.mkdir(config_dir_name) unless Dir.exist?(config_dir_name)
   config_dir_name
 end
