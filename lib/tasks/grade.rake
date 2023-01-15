@@ -98,7 +98,7 @@ def sync_specs_with_source
   # Discard unstaged changes in spec folder
   `git checkout spec -q`
   `git clean spec -f -q`
-  local_sha = `git ls-tree HEAD #{Rails.root.join('spec')}`.chomp.split[2]
+  local_sha = `git ls-tree HEAD #{project_root.root.join('spec')}`.chomp.split[2]
 
   unless remote_sha == local_sha
     `git fetch upstream`
