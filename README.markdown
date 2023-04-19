@@ -1,5 +1,7 @@
 # grade_runner
 
+## Deprecated: Use [grade_runner](https://github.com/firstdraft/grade_runner/) going forward.
+
 A Ruby client for [firstdraft Grades](https://grades.firstdraft.com)
 
 
